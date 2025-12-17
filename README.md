@@ -1,5 +1,5 @@
 ﻿# **Chat Queue**
-### An electron app to monitor and open incoming links from your Twitch chat.
+### An Electron app to monitor and open incoming links from your Twitch chat.
 
 ## **Features**
 - Use any Twitch chat regardless of viewer count
