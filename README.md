@@ -12,6 +12,6 @@
 - Shows Twitch roles such as: Broadcaster, Mod, VIP, Sub
 
 ## **Installation**
-- Download the latest version in [Releases](https://github.com/yxttuh/ChatQueue/releases)
+- Download and run the latest ChatQueue.exe in [Releases](https://github.com/yxttuh/ChatQueue/releases)
 
 ## **Developed by [Yxtt](https://linktr.ee/yxtt)**
