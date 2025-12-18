@@ -9,12 +9,12 @@ const io = new Server(server);
 
 app.use(express.static('public'));
 
-// --- STATE MANAGEMENT ---
+
 let linkQueue = [];
 let currentLink = null;
 let currentChannel = null; // We start with no channel
 
-// --- TWITCH SETUP ---
+
 const client = new tmi.Client({
     channels: [] // Start empty
 });
@@ -44,7 +44,7 @@ client.on('message', (channel, tags, message, self) => {
     }
 });
 
-// --- SOCKET.IO EVENTS ---
+
 io.on('connection', (socket) => {
     // Send current state to new user
     socket.emit('updateQueue', linkQueue);
