@@ -10,7 +10,7 @@ let currentChannel = null;
 let linkQueue = [];
 let isQueueOpen = true; // State of the queue
 
-// Load saved bans from storage on startup
+
 let savedBans = store.get('bannedUsers', []); 
 let banList = new Set(savedBans); 
 
@@ -65,7 +65,6 @@ function updateBanList(user, isBanning) {
 ipcMain.on('ban-user', (event, username) => updateBanList(username, true));
 ipcMain.on('unban-user', (event, username) => updateBanList(username, false));
 
-// TOGGLE QUEUE LOGIC
 ipcMain.on('toggle-queue', (event) => {
     isQueueOpen = !isQueueOpen;
     if (mainWindow) mainWindow.webContents.send('queue-status-sync', isQueueOpen);
@@ -99,7 +98,6 @@ ipcMain.on('join-channel', async (event, channelName) => {
             }
         }
         
-        // PAUSE CHECK: If queue is closed or user is banned, ignore the message
         if (!isQueueOpen || banList.has(username)) return;
 
         const urlRegex = /(https?:\/\/[^\s]+)/g;
