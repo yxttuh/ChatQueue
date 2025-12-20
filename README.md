@@ -19,3 +19,6 @@
 
 ## **Screenshots**
 ![Queue](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/queue.png?raw=true) ![Bans](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/main-bans.png?raw=true) 
+
+## **Virustotal Scan**
+
