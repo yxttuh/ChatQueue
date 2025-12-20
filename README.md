@@ -15,4 +15,8 @@
 ## **Installation**
 - Download and run the latest ChatQueue.exe in [Releases](https://github.com/yxttuh/ChatQueue/releases)
 
+## **Screenshots**
+![Menu](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/main-menu.png?raw=true) ![Queue](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/connected-open.png?raw=true)  ![Bans](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/main-bans.png?raw=true) 
+
+
 ## **Developed by [Yxtt](https://linktr.ee/yxtt)**
