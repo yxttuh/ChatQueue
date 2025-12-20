@@ -18,4 +18,4 @@
 ## **Developed by [Yxtt](https://linktr.ee/yxtt)**
 
 ## **Screenshots**
-![Queue](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/connected-open.png?raw=true)  ![Bans](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/main-bans.png?raw=true) 
+![Queue](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/queue.png?raw=true) ![Bans](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/main-bans.png?raw=true) 
