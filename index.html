@@ -2,13 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Twitch Link Viewer</title>
+    <title>ChatQueue</title>
     <style>
-
         :root {
             --bg-darkest: #0e0e10;  
             --bg-medium: #18181b;   
-            --bg-content: #171717;  
             --bg-light: #1f1f23;    
             --bg-hover: #26262c;    
             --accent: #9146ff;      
@@ -16,328 +14,100 @@
             --text-muted: #adadb8;
             --success: #00f593;
             --danger: #eb0400;
-            --yt-red: #FF0000;
         }
 
-        body { 
-            font-family: 'Inter', 'Roobert', 'Segoe UI', sans-serif; 
-            display: flex; 
-            height: 100vh; 
-            margin: 0; 
-            overflow: hidden; 
-            background: var(--bg-darkest); 
-            color: var(--text-main); 
-        }
-
-
-        *::-webkit-scrollbar { width: 6px; }
-        *::-webkit-scrollbar-track { background: transparent; }
-        *::-webkit-scrollbar-thumb { background: #464649; border-radius: 10px; }
-
-        #sidebar { 
-            width: 300px; 
-            background: var(--bg-medium); 
-            display: flex; 
-            flex-direction: column; 
-            border-left: 1px solid #26262c;
-            order: 2; 
-        }
-
-        .channel-selector { 
-            padding: 15px; 
-            background: var(--bg-medium); 
-            border-bottom: 1px solid #26262c; 
-        }
-
-
-        .hidden-ui .channel-selector {
-            display: none;
-        }
-
+        body { font-family: 'Inter', sans-serif; margin: 0; background: var(--bg-darkest); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        
+        #sidebar { flex: 1; display: flex; flex-direction: column; background: var(--bg-medium); width: 100%; }
+        
+        .channel-selector { padding: 15px; border-bottom: 1px solid #26262c; }
         .input-group { display: flex; flex-direction: column; gap: 8px; }
         
-        input[type="text"] { 
-            padding: 8px 12px; 
-            border-radius: 4px; 
-            border: 2px solid transparent; 
-            background: var(--bg-light); 
-            color: white; 
-            outline: none; 
-            font-size: 13px; 
-            transition: border-color 0.2s;
-        }
-        input[type="text"]:focus { border-color: var(--accent); background: #000; }
+        input[type="text"] { padding: 10px 12px; border-radius: 4px; border: 2px solid transparent; background: var(--bg-light); color: white; outline: none; font-size: 14px; }
+        input[type="text"]:focus { border-color: var(--accent); }
 
-        #join-btn { 
-            padding: 10px 12px; 
-            background: var(--accent); 
-            color: white; 
-            border: none; 
-            cursor: pointer; 
-            border-radius: 4px; 
-            font-weight: 700;
-            font-size: 13px;
-            text-transform: uppercase;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        #join-btn.connected {
-            background-color: var(--success);
-            color: #000;
-        }
+        #join-btn { padding: 10px; background: var(--accent); color: white; border: none; cursor: pointer; border-radius: 4px; font-weight: 700; text-transform: uppercase; }
+        #join-btn.connected { background-color: var(--success); color: #000; }
 
-        #queue-info-bar { 
-            margin-top: 20px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-        }
-
-        #queue-counter { 
-            font-size: 11px; 
-            color: var(--text-muted); 
-            font-weight: 700; 
-            text-transform: uppercase;
-        }
-
-        .toggle-container {
-            position: relative;
-            width: 120px;
-            height: 28px;
-            background: #000;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            user-select: none;
-            border: 1px solid #26262c;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 58px;
-            height: 24px;
-            border-radius: 4px;
-            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s ease;
-            z-index: 1;
-            background-color: var(--danger);
-        }
-
-        .toggle-container.is-open .toggle-slider {
-            transform: translateX(58px);
-            background-color: var(--success);
-        }
-
-        .toggle-label {
-            flex: 1;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            font-weight: 800;
-            z-index: 2;
-            pointer-events: none;
-            color: #adadb8;
-            text-transform: uppercase;
-            transition: color 0.3s ease;
-            line-height: 1;
-        }
-
-        .toggle-container.is-open .right-label { color: #000; }
-        .toggle-container:not(.is-open) .left-label { color: #fff; }
-
-        #queue-list { 
-            flex: 1; 
-            overflow-y: auto; 
-            padding: 5px; 
-            list-style: none; 
-            margin: 0; 
-        }
-
-        .queue-item { 
-            display: flex; 
-            align-items: center; 
-            background: transparent; 
-            padding: 8px; 
-            margin-bottom: 2px; 
-            border-radius: 4px; 
-            transition: background 0.1s;
-        }
+        #queue-list { flex: 1; overflow-y: auto; padding: 10px; list-style: none; margin: 0; }
+        .queue-item { display: flex; align-items: center; padding: 10px; margin-bottom: 5px; border-radius: 6px; background: var(--bg-light); border-left: 4px solid transparent; transition: background 0.1s; }
         .queue-item:hover { background: var(--bg-hover); }
 
-        .queue-item.active {
-            background: rgba(145, 70, 255, 0.15);
-            border: 1px solid var(--accent);
+        .queue-item.clicked { 
+            background: rgba(0, 245, 147, 0.05); 
+            border-left: 4px solid var(--success);
+            opacity: 0.7;
         }
-        .queue-item.active strong { color: #fff; }
-
+        
         .queue-info { flex: 1; min-width: 0; cursor: pointer; }
-        .queue-info strong { color: var(--accent); font-size: 13px; }
-        .queue-link { color: var(--text-main); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .queue-info strong { color: var(--accent); font-size: 14px; display: block; margin-bottom: 2px; }
+        .queue-link { color: var(--text-muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .remove-btn { 
-            opacity: 0;
+        .remove-btn, .ban-btn { 
             background: transparent; 
             border: none; 
             color: var(--text-muted); 
-            font-size: 16px; 
             cursor: pointer; 
-            transition: opacity 0.2s;
-        }
-        .queue-item:hover .remove-btn { opacity: 1; }
-        .remove-btn:hover { color: #ff4444; }
-
-        .controls { padding: 15px; background: var(--bg-medium); border-top: 1px solid #26262c; }
-        #next-btn { 
-            width: 100%; 
-            padding: 10px; 
-            cursor: pointer; 
-            background: var(--accent); 
-            border: none; 
-            color: white; 
-            font-weight: 600; 
-            border-radius: 4px; 
-            font-size: 13px; 
-        }
-        #clear-btn { 
-            width: 100%; 
-            margin-top: 8px; 
-            background: var(--bg-light); 
-            border: 1px solid #333; 
-            color: var(--text-muted); 
-            padding: 6px;
-            font-size: 10px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            border-radius: 4px;
-            text-transform: uppercase;
-        }
-
-        #main { flex: 1; display: flex; flex-direction: column; background: var(--bg-content); order: 1; position: relative; }
-        #header-bar { 
-            padding: 0 15px; 
-            background: var(--bg-darkest); 
-            border-bottom: 1px solid #26262c; 
-            display: flex; 
-            justify-content: flex-end;
-            align-items: center; 
-            height: 50px; 
-        }
-
-        #yt-alert-panel {
-            position: absolute;
-            top: 70px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1a1a1a;
-            border: 2px solid var(--yt-red);
-            border-radius: 8px;
-            padding: 20px 30px;
-            z-index: 999999; 
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.9);
-            animation: slideDown 0.3s ease-out;
-        }
-
-        @keyframes slideDown {
-            from { top: 40px; opacity: 0; }
-            to { top: 70px; opacity: 1; }
-        }
-
-        #yt-alert-panel p { margin: 0 0 15px 0; font-weight: 800; color: #fff; font-size: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .yt-btn-group { display: flex; gap: 12px; }
-        
-        .yt-confirm-btn { background: var(--yt-red); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 700; font-size: 12px; text-transform: uppercase; }
-        .yt-dismiss-btn { background: #333; color: #ccc; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; text-transform: uppercase; }
-        .yt-dismiss-btn:hover { background: #444; color: #fff; }
-
-        #open-browser-btn, #hide-ui-btn {
-            background: var(--bg-light);
-            border: none;
-            color: var(--text-main);
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
+            padding: 5px 8px; 
+            transition: color 0.2s, text-shadow 0.2s; 
             font-weight: 600;
-            margin-right: 12px;
         }
-        #open-browser-btn:hover, #hide-ui-btn:hover { background: var(--bg-hover); }
 
-        .volume-control { display: flex; align-items: center; gap: 8px; }
-        .volume-label { font-size: 11px; font-weight: 700; color: var(--text-muted); }
+        .remove-btn { font-size: 18px; }
+        .ban-btn { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .remove-btn:hover, .ban-btn:hover { 
+            color: white; 
+            text-shadow: 0 0 8px rgba(255,255,255,0.5);
+        }
         
-        input[type=range] { -webkit-appearance: none; width: 80px; background: transparent; }
-        input[type=range]::-webkit-slider-runnable-track { height: 4px; background: #35353b; border-radius: 2px; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 6px; border-radius: 2px; background: white; cursor: pointer; margin-top: -6px; }
+        .controls { padding: 15px; background: var(--bg-medium); border-top: 1px solid #26262c; }
+        #next-btn { width: 100%; padding: 12px; cursor: pointer; background: var(--accent); border: none; color: white; font-weight: 700; border-radius: 4px; font-size: 14px; }
+        
+        .manage-bans-btn {
+            width: 100%;
+            margin-top: 10px;
+            background: var(--bg-light);
+            color: var(--text-muted);
+            border: 1px solid #26262c;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 12px;
+        }
 
-        webview { flex: 1; background: #000; display: none; }
-        .empty-state { display: flex; justify-content: center; align-items: center; height: 100%; flex-direction: column; color: var(--text-muted); }
-
-        .badge { font-size: 10px; padding: 1px 4px; border-radius: 2px; margin-left: 6px; font-weight: 700; color: #fff; text-transform: uppercase; }
+        .badge { font-size: 9px; padding: 2px 5px; border-radius: 3px; margin-left: 6px; color: #fff; font-weight: 800; vertical-align: middle; }
         .role-STREAMER { background: var(--danger); }
         .role-MOD { background: var(--success); color: #000; }
-        .role-VIP { background: #b53fef; }
-        .role-SUB { background: #5865f2; }
-        .active-label { color: var(--success); font-size: 9px; margin-left: 8px; vertical-align: middle; border: 1px solid var(--success); padding: 0 4px; border-radius: 2px; }
+
+        #ban-modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); }
+        .modal-content { background: var(--bg-medium); margin: 15% auto; padding: 20px; width: 80%; max-width: 280px; border-radius: 8px; border: 1px solid var(--accent); }
+        .ban-list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #26262c; }
+        .unban-btn { background: var(--danger); color: white; border: none; border-radius: 4px; padding: 4px 10px; cursor: pointer; font-size: 12px; }
     </style>
 </head>
 <body>
-    <div id="main">
-        <div id="yt-alert-panel">
-            <p>📺 YouTube Link Detected</p>
-            <div class="yt-btn-group">
-                <button class="yt-confirm-btn" id="yt-open-external">Open in Browser</button>
-                <button class="yt-dismiss-btn" id="yt-dismiss">Stay in App</button>
-            </div>
-        </div>
-
-        <div id="header-bar">
-            <div class="volume-control">
-                <button id="hide-ui-btn">Hide Info</button>
-                <button id="open-browser-btn">Open In Browser</button>
-                <span class="volume-label">VOLUME</span>
-                <input type="range" id="volume-slider" min="0" max="100" value="50">
-            </div>
-        </div>
-        <webview 
-            id="content-view" 
-            src="data:text/html,<html></html>"
-            useragent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-            partition="persist:ig_session"
-            allowpopups
-        ></webview>
-        <div id="empty-msg" class="empty-state">
-            <h3 style="color: white; margin-bottom: 4px;">Queue Ready</h3>
-            <p style="font-size: 14px;">Links from chat will show here automatically.</p>
-        </div>
-    </div>
-
     <div id="sidebar">
         <div class="channel-selector">
             <div class="input-group">
                 <input type="text" id="channel-input" placeholder="Twitch Channel Name..." />
                 <button id="join-btn">Connect</button>
             </div>
-            <div id="queue-info-bar">
-                <span id="queue-counter">0 LINKS IN QUEUE</span>
-                <div class="toggle-container is-open" id="queue-toggle-btn">
-                    <div class="toggle-slider"></div>
-                    <span class="toggle-label left-label">Closed</span>
-                    <span class="toggle-label right-label">Open</span>
-                </div>
-            </div>
         </div>
         <ul id="queue-list"></ul>
         <div class="controls">
-            <button id="next-btn">Next in Queue</button>
-            <button id="clear-btn">Log Out & Reset</button>
+            <button id="next-btn">OPEN NEXT LINK</button>
+            <button class="manage-bans-btn" onclick="toggleBanModal(true)">Manage Banned Users</button>
+        </div>
+    </div>
+
+    <div id="ban-modal">
+        <div class="modal-content">
+            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin:0;">Bans</h3>
+                <button onclick="toggleBanModal(false)" style="background:none; border:none; color:white; cursor:pointer; font-size:22px;">&times;</button>
+            </div>
+            <div id="banned-users-list" style="max-height: 300px; overflow-y: auto;"></div>
         </div>
     </div>
 
@@ -347,76 +117,10 @@
         const channelInput = document.getElementById('channel-input');
         const joinBtn = document.getElementById('join-btn');
         const queueList = document.getElementById('queue-list');
-        const webview = document.getElementById('content-view');
-        const emptyMsg = document.getElementById('empty-msg');
-        const volumeSlider = document.getElementById('volume-slider');
-        const clearBtn = document.getElementById('clear-btn');
-        const queueCounter = document.getElementById('queue-counter');
-        const queueToggleBtn = document.getElementById('queue-toggle-btn');
-        const openBrowserBtn = document.getElementById('open-browser-btn');
-        const hideUiBtn = document.getElementById('hide-ui-btn');
-        const sidebar = document.getElementById('sidebar');
-        
-        const ytPanel = document.getElementById('yt-alert-panel');
-        const ytOpenBtn = document.getElementById('yt-open-external');
-        const ytDismissBtn = document.getElementById('yt-dismiss');
-
-        let isQueueOpen = true;
         let isConnected = false;
-        let isUiHidden = false;
-        let currentActiveData = null; 
         let currentQueue = [];
 
-
-        hideUiBtn.onclick = () => {
-            isUiHidden = !isUiHidden;
-            if (isUiHidden) {
-                sidebar.classList.add('hidden-ui');
-                hideUiBtn.innerText = 'Show Info';
-            } else {
-                sidebar.classList.remove('hidden-ui');
-                hideUiBtn.innerText = 'Hide Info';
-            }
-        };
-
-        channelInput.addEventListener('input', () => {
-            if (isConnected) {
-                isConnected = false;
-                joinBtn.classList.remove('connected');
-                joinBtn.innerText = 'Connect';
-            }
-        });
-
-        openBrowserBtn.onclick = () => {
-            if (currentActiveData) {
-                ipcRenderer.send('open-external', currentActiveData.url);
-            }
-        };
-
-        ytDismissBtn.onclick = () => { ytPanel.style.display = 'none'; };
-        ytOpenBtn.onclick = () => {
-            if (currentActiveData) ipcRenderer.send('open-external', currentActiveData.url);
-            ytPanel.style.display = 'none';
-        };
-
-        queueToggleBtn.onclick = () => {
-            isQueueOpen = !isQueueOpen;
-            ipcRenderer.send('toggle-queue', isQueueOpen);
-            queueToggleBtn.classList.toggle('is-open', isQueueOpen);
-        };
-
-        function onWebviewReady() {
-            const vol = volumeSlider.value / 100;
-            webview.executeJavaScript(`document.querySelectorAll('video, audio').forEach(m => m.volume = ${vol});`).catch(() => {});
-            webview.insertCSS(`::-webkit-scrollbar { display: none; } body { -ms-overflow-style: none; scrollbar-width: none; }`);
-        }
-
-        volumeSlider.addEventListener('input', () => {
-             const vol = volumeSlider.value / 100;
-             webview.executeJavaScript(`document.querySelectorAll('video, audio').forEach(m => m.volume = ${vol});`).catch(() => {});
-        });
-        
-        webview.addEventListener('dom-ready', onWebviewReady);
+        ipcRenderer.send('request-initial-data');
 
         function joinChannel() {
             const channel = channelInput.value.trim();
@@ -430,12 +134,6 @@
         channelInput.addEventListener("keypress", (e) => { if (e.key === "Enter") joinChannel(); });
         document.getElementById('next-btn').onclick = () => ipcRenderer.send('next-link');
 
-        clearBtn.onclick = () => {
-            if (confirm("Reset application and clear sessions?")) {
-                ipcRenderer.send('clear-session');
-            }
-        };
-
         ipcRenderer.on('status-update', (event, channel) => {
             isConnected = true;
             joinBtn.classList.add('connected');
@@ -444,63 +142,45 @@
 
         function renderFullQueue() {
             queueList.innerHTML = '';
-            
-            if (currentActiveData) {
-                const li = document.createElement('li');
-                li.className = 'queue-item active';
-                const badgeHTML = currentActiveData.role ? `<span class="badge role-${currentActiveData.role}">${currentActiveData.role}</span>` : "";
-                li.innerHTML = `
-                    <div class="queue-info">
-                        <strong>${currentActiveData.user}${badgeHTML} <span class="active-label">PLAYING</span></strong>
-                        <div class="queue-link">${currentActiveData.url}</div>
-                    </div>
-                `;
-                queueList.appendChild(li);
-            }
-
             currentQueue.forEach(item => {
                 const li = document.createElement('li');
-                li.className = 'queue-item';
+                li.className = `queue-item ${item.clicked ? 'clicked' : ''}`;
                 const badgeHTML = item.role ? `<span class="badge role-${item.role}">${item.role}</span>` : "";
                 li.innerHTML = `
-                    <div class="queue-info" onclick="loadSpecificLink(${item.id})">
+                    <div class="queue-info" onclick="loadSpecificLink('${item.id}')">
                         <strong>${item.user}${badgeHTML}</strong>
                         <div class="queue-link">${item.url}</div>
                     </div>
-                    <button class="remove-btn" onclick="removeItem(${item.id})">×</button>
+                    <button class="ban-btn" onclick="banUser('${item.user}')">Ban</button>
+                    <button class="remove-btn" onclick="removeItem('${item.id}')">&times;</button>
                 `;
                 queueList.appendChild(li);
             });
-
-            queueCounter.innerText = `${currentQueue.length} LINKS IN QUEUE`;
         }
+
+        function toggleBanModal(show) {
+            document.getElementById('ban-modal').style.display = show ? 'block' : 'none';
+        }
+
+        window.banUser = (username) => {
+            if (confirm(`Ban ${username}?`)) ipcRenderer.send('ban-user', username);
+        };
+
+        window.unbanUser = (username) => ipcRenderer.send('unban-user', username);
+
+        ipcRenderer.on('update-ban-list', (event, banList) => {
+            const listDiv = document.getElementById('banned-users-list');
+            listDiv.innerHTML = banList.length ? '' : '<p style="color:var(--text-muted); font-size:12px;">No bans.</p>';
+            banList.forEach(user => {
+                const div = document.createElement('div');
+                div.className = 'ban-list-item';
+                div.innerHTML = `<span>${user}</span><button class="unban-btn" onclick="unbanUser('${user}')">Unban</button>`;
+                listDiv.appendChild(div);
+            });
+        });
 
         ipcRenderer.on('update-queue', (event, queue) => {
             currentQueue = queue;
-            renderFullQueue();
-        });
-
-        ipcRenderer.on('load-url', (event, linkData) => {
-            ytPanel.style.display = 'none'; 
-            emptyMsg.style.display = 'none';
-            webview.style.display = 'flex';
-            webview.loadURL(linkData.url);
-            currentActiveData = linkData; 
-            renderFullQueue();
-        });
-
-        ipcRenderer.on('youtube-warning', (event, linkData) => {
-            setTimeout(() => {
-                ytPanel.style.display = 'flex';
-            }, 600); 
-        });
-
-        ipcRenderer.on('reset-view', () => {
-            ytPanel.style.display = 'none';
-            webview.style.display = 'none';
-            emptyMsg.style.display = 'flex';
-            webview.src = "data:text/html,<html></html>";
-            currentActiveData = null; 
             renderFullQueue();
         });
 
