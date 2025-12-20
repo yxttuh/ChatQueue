@@ -4,12 +4,13 @@
 ## **Features**
 - Use any Twitch chat regardless of viewer count
 - Close/Open queue function
+- Moderator commands (%ban, %remove) 
 - Supports any website
-- Volume slider
 - Open links in an external browser
-- Hide function to hide connection details
-- Button to log out of all sites and clear cache
 - Shows Twitch roles such as: Broadcaster, Mod, VIP, Sub
+- Ban users and/or remove links from queue
+- Locally stored banlist
+
 
 ## **Installation**
 - Download and run the latest ChatQueue.exe in [Releases](https://github.com/yxttuh/ChatQueue/releases)
