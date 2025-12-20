@@ -8,7 +8,9 @@ let mainWindow;
 let client;
 let currentChannel = null;
 let linkQueue = [];
-let isQueueOpen = true; 
+let isQueueOpen = true; // State of the queue
+
+// Load saved bans from storage on startup
 let savedBans = store.get('bannedUsers', []); 
 let banList = new Set(savedBans); 
 
@@ -33,6 +35,7 @@ function createWindow() {
 
     mainWindow.webContents.on('did-finish-load', () => {
         mainWindow.webContents.send('update-ban-list', Array.from(banList));
+        mainWindow.webContents.send('queue-status-sync', isQueueOpen);
     });
 }
 
@@ -48,7 +51,6 @@ function updateBanList(user, isBanning) {
     
     if (isBanning) {
         banList.add(targetUser);
-        // Clean queue if banned
         linkQueue = linkQueue.filter(item => item.user.toLowerCase() !== targetUser);
         if (mainWindow) mainWindow.webContents.send('update-queue', linkQueue);
     } else {
@@ -62,6 +64,12 @@ function updateBanList(user, isBanning) {
 
 ipcMain.on('ban-user', (event, username) => updateBanList(username, true));
 ipcMain.on('unban-user', (event, username) => updateBanList(username, false));
+
+// TOGGLE QUEUE LOGIC
+ipcMain.on('toggle-queue', (event) => {
+    isQueueOpen = !isQueueOpen;
+    if (mainWindow) mainWindow.webContents.send('queue-status-sync', isQueueOpen);
+});
 
 ipcMain.on('join-channel', async (event, channelName) => {
     if (!channelName) return;
@@ -81,7 +89,6 @@ ipcMain.on('join-channel', async (event, channelName) => {
                 updateBanList(message.split(' ')[1], true);
                 return;
             }
-            
             if (message.startsWith('%remove ')) {
                 const target = message.split(' ')[1]?.toLowerCase().replace('@', '');
                 if (target) {
@@ -90,13 +97,9 @@ ipcMain.on('join-channel', async (event, channelName) => {
                 }
                 return;
             }
-
-            if (message.startsWith('%unban ')) {
-                updateBanList(message.split(' ')[1], false);
-                return;
-            }
         }
         
+        // PAUSE CHECK: If queue is closed or user is banned, ignore the message
         if (!isQueueOpen || banList.has(username)) return;
 
         const urlRegex = /(https?:\/\/[^\s]+)/g;
