@@ -22,4 +22,6 @@
 
 ## **Virustotal Scan**
 (https://www.virustotal.com/gui/file/36903171d1b98c2d93d29e527f9b378f54af1d208fdde430cafb874a628a8e28)
+- Since the app is unsigned, be aware that this may cause false positives.
+- If unsure, all source code is visible 
 
