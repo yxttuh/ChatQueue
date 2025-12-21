@@ -21,4 +21,5 @@
 ![Queue](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/queue.png?raw=true) ![Bans](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/main-bans.png?raw=true) 
 
 ## **Virustotal Scan**
+(https://www.virustotal.com/gui/file/36903171d1b98c2d93d29e527f9b378f54af1d208fdde430cafb874a628a8e28)
 
