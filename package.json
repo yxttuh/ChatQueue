@@ -1,0 +1,24 @@
+{
+  "name": "ChatQueue",
+  "version": "2.1.1",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.yxtt.chatqueue",
+    "win": {
+      "target": "portable",
+      "icon": "icon.ico"
+    }
+  },
+  "dependencies": {
+    "electron-store": "^6.0.1",
+    "tmi.js": "^1.8.5"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "latest"
+  }
+}
