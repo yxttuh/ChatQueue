@@ -12,16 +12,16 @@
 - Locally stored banlist
 
 
-## **Installation**
+## **Usage**
 - Download and run the latest ChatQueue.exe in [Releases](https://github.com/yxttuh/ChatQueue/releases)
 
-## **Developed by [Yxtt](https://linktr.ee/yxtt)**
+## **Developed by [Yxtt](https://yxtt.dev)**
 
 ## **Screenshots**
 ![Queue](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/queue.png?raw=true) ![Bans](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/main-bans.png?raw=true) 
 
 ## **Virustotal Scan**
-(https://www.virustotal.com/gui/file/36903171d1b98c2d93d29e527f9b378f54af1d208fdde430cafb874a628a8e28)
+(https://www.virustotal.com/gui/file/e717cfd8d3e3ad5db933761d3e9a0707a2c0af9b0c514f17b2ef4c230117ef16)
 - Since the app is unsigned, be aware that this may cause false positives.
 - If unsure, all source code is visible 
 
