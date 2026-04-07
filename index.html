@@ -156,9 +156,11 @@
         <ul id="queue-list"></ul>
 
         <div class="controls">
-            <button id="next-btn">OPEN NEXT LINK</button>
-            <button class="manage-bans-btn" onclick="toggleBanModal(true)">Manage Banned Users</button>
-        </div>
+    <button id="next-btn">OPEN NEXT LINK</button>
+    <button id="load-file-btn" class="manage-bans-btn" style="margin-top: 10px; background: var(--bg-hover);">
+    </button>
+    <button class="manage-bans-btn" onclick="toggleBanModal(true)">Manage Banned Users</button>
+</div>
     </div>
 
     <div id="ban-modal">
@@ -260,6 +262,9 @@
 
         window.removeItem = (id) => ipcRenderer.send('remove-link', id);
         window.loadSpecificLink = (id) => ipcRenderer.send('load-link-by-id', id);
+document.getElementById('load-file-btn').onclick = () => {
+    ipcRenderer.send('import-links-file');
+};
     </script>
 </body>
 </html>
