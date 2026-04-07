@@ -18,10 +18,10 @@
 ## **Developed by [Yxtt](https://yxtt.dev)**
 
 ## **Screenshots**
-![Queue](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/queue.png?raw=true) ![Bans](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/main-bans.png?raw=true) 
+![Queue](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/queue.png?raw=true) ![Bans](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/main-bans.png?raw=true) ![Import](https://github.com/yxttuh/ChatQueue/blob/main/screenshots/import-text.png?raw=true) 
 
 ## **Virustotal Scan**
-(https://www.virustotal.com/gui/file/e717cfd8d3e3ad5db933761d3e9a0707a2c0af9b0c514f17b2ef4c230117ef16)
+https://www.virustotal.com/gui/file/aacff43de13338d6c517e8aa91a3feb441bbc86eed380717da3350aa07bc793e
 - Since the app is unsigned, be aware that this may cause false positives.
 - If unsure, all source code is visible 
 
