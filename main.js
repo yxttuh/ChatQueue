@@ -1,4 +1,5 @@
-const { app, BrowserWindow, ipcMain, session, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, session, shell, dialog } = require('electron');
+const fs = require('fs');
 const path = require('path');
 const tmi = require('tmi.js');
 const Store = require('electron-store');
@@ -156,4 +157,43 @@ ipcMain.on('load-link-by-id', (event, id) => {
 
 ipcMain.on('request-initial-data', (event) => {
     event.reply('update-ban-list', Array.from(banList));
+});
+ipcMain.on('import-links-file', async (event) => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+        properties: ['openFile'],
+        filters: [{ name: 'Text Files', extensions: ['txt'] }]
+    });
+
+    if (result.canceled || result.filePaths.length === 0) return;
+
+    const filePath = result.filePaths[0];
+    
+    fs.readFile(filePath, 'utf-8', (err, data) => {
+        if (err) {
+            console.error("Failed to read file", err);
+            return;
+        }
+
+        // Regex to find all URLs in the text file
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        const foundLinks = data.match(urlRegex);
+
+        if (foundLinks) {
+            foundLinks.forEach((link) => {
+                const linkData = { 
+                    user: "SYSTEM (File)", 
+                    role: "MOD", // Giving it a badge so it stands out
+                    url: link, 
+                    id: 'wv-' + Date.now() + Math.random().toString(36).substr(2, 9), 
+                    clicked: false 
+                };
+                linkQueue.push(linkData);
+            });
+
+            // Send the updated queue back to the UI
+            if (mainWindow) {
+                mainWindow.webContents.send('update-queue', linkQueue);
+            }
+        }
+    });
 });
