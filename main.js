@@ -174,26 +174,30 @@ ipcMain.on('import-links-file', async (event) => {
             return;
         }
 
-        // Regex to find all URLs in the text file
-        const urlRegex = /(https?:\/\/[^\s]+)/g;
-        const foundLinks = data.match(urlRegex);
+        const lines = data.split(/\r?\n/);
+        const linePattern = /^(https?:\/\/[^\s]+)\s+(.+)$/;
 
-        if (foundLinks) {
-            foundLinks.forEach((link) => {
+        lines.forEach((line) => {
+            const trimmedLine = line.trim();
+            const match = trimmedLine.match(linePattern);
+            
+            if (match) {
+                const link = match[1];
+                const userName = match[2];
+
                 const linkData = { 
-                    user: "SYSTEM (File)", 
-                    role: "MOD", // Giving it a badge so it stands out
+                    user: userName, 
+                    role: "MOD", 
                     url: link, 
                     id: 'wv-' + Date.now() + Math.random().toString(36).substr(2, 9), 
                     clicked: false 
                 };
                 linkQueue.push(linkData);
-            });
-
-            // Send the updated queue back to the UI
-            if (mainWindow) {
-                mainWindow.webContents.send('update-queue', linkQueue);
             }
+        });
+
+        if (mainWindow) {
+            mainWindow.webContents.send('update-queue', linkQueue);
         }
     });
 });
